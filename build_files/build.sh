@@ -29,6 +29,10 @@ dnf5 -y install kernel-cachyos kernel-cachyos-devel-matched --allowerasing
 dnf5 -y copr enable bieszczaders/kernel-cachyos-addons
 dnf5 -y install libcap-ng libcap-ng-devel procps-ng procps-ng-devel
 dnf5 -y install uksmd
+systemctl enable uksmd.service
+
+rm -rf /usr/lib/systemd/coredump.conf
+dnf5 -y install cachyos-settings --allowerasing
 
 ## Install the Kwin better blur packages
 dnf5 -y copr enable infinality/kwin-effects-better-blur-dx
@@ -41,9 +45,15 @@ mv -f 05-rpmostree.install.bak 05-rpmostree.install \
 cd -
 
 # Regen initramfs
-KERNEL_VERSION=$(dnf list kernel-cachyos -q | awk '/kernel-cachyos/ {print $2}' | head -n 1 | cut -d'-' -f1)-cachyos
+releasever=$(/usr/bin/rpm -E %fedora)
+basearch=$(/usr/bin/arch)
+KERNEL_VERSION=$(dnf list kernel-cachyos -q | awk '/kernel-cachyos/ {print $2}' | head -n 1 | cut -d'-' -f1)1-cachyos
 # Ensure Initramfs is generated
 depmod -a ${KERNEL_VERSION}
 export DRACUT_NO_XATTR=1
 /usr/bin/dracut --no-hostonly --kver "${KERNEL_VERSION}" --reproducible -v --add ostree -f "/lib/modules/${KERNEL_VERSION}/initramfs.img"
 chmod 0600 "/lib/modules/${KERNEL_VERSION}/initramfs.img"
+
+## CLEAN UP
+# Clean up dnf cache to reduce image size
+dnf5 -y clean all
