@@ -16,9 +16,10 @@ sed -i '/^\[main\]/a max_parallel_downloads=10' /etc/dnf/dnf.conf
 dnf5 -y copr enable bieszczaders/kernel-cachyos
 dnf5 -y install kernel-cachyos kernel-cachyos-devel-matched --allowerasing
 
-## Install CachyOS packages
+## Install CachyOS addon packages
 dnf5 -y copr enable bieszczaders/kernel-cachyos-addons
 dnf5 -y install libcap-ng libcap-ng-devel procps-ng procps-ng-devel
+dnf5 -y install uksmd
 
 ## Install the Kwin better blur packages
 dnf5 -y copr enable infinality/kwin-effects-better-blur-dx
