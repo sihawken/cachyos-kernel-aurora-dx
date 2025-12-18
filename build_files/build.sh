@@ -29,6 +29,56 @@ dnf5 -y install kernel-cachyos kernel-cachyos-devel-matched --allowerasing
 dnf5 -y copr enable bieszczaders/kernel-cachyos-addons
 dnf5 -y install libcap-ng libcap-ng-devel procps-ng procps-ng-devel
 dnf5 -y install uksmd
+
+tee "/usr/lib/systemd/system/uksmd.service" > /dev/null <<EOF
+[Unit]
+Description=Userspace KSM helper daemon
+Documentation=https://codeberg.org/pf-kernel/uksmd
+ConditionPathExists=/sys/kernel/process_ksm/process_ksm_enable
+ConditionPathExists=/sys/kernel/process_ksm/process_ksm_disable
+ConditionPathExists=/sys/kernel/process_ksm/process_ksm_status
+
+[Service]
+Type=notify
+DynamicUser=true
+User=uksmd
+Group=uksmd
+CapabilityBoundingSet=CAP_SYS_PTRACE CAP_DAC_OVERRIDE CAP_SYS_NICE
+AmbientCapabilities=CAP_SYS_PTRACE CAP_DAC_OVERRIDE CAP_SYS_NICE
+PrivateNetwork=yes
+RestrictAddressFamilies=AF_UNIX
+RestrictNamespaces=true
+PrivateDevices=true
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectClock=true
+ProtectControlGroups=true
+ProtectHome=true
+ProtectKernelLogs=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ReadWritePaths=/sys/kernel/mm/ksm/run
+ProtectSystem=strict
+RestrictSUIDSGID=true
+SystemCallArchitectures=native
+RestrictRealtime=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+RemoveIPC=true
+TasksMax=1
+UMask=0066
+ProtectHostname=true
+IPAddressDeny=any
+SystemCallFilter=~@clock @debug @module @mount @raw-io @reboot @swap @privileged @resources @cpu-emulation @obsolete
+SystemCallFilter=setpriority set_mempolicy
+WatchdogSec=30
+Restart=on-failure
+ExecStart=/usr/bin/uksmd
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
 ln -s /usr/lib/systemd/system/uksmd.service /etc/systemd/system/multi-user.target.wants/uksmd.service
 
 rm -rf /usr/lib/systemd/coredump.conf
