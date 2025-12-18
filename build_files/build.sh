@@ -12,6 +12,15 @@ set -ouex pipefail
 ## DNF5 Speedup
 sed -i '/^\[main\]/a max_parallel_downloads=10' /etc/dnf/dnf.conf
 
+# create a shims to bypass kernel install triggering dracut/rpm-ostree
+# seems to be minimal impact, but allows progress on build
+cd /usr/lib/kernel/install.d \
+&& mv 05-rpmostree.install 05-rpmostree.install.bak \
+&& mv 50-dracut.install 50-dracut.install.bak \
+&& printf '%s\n' '#!/bin/sh' 'exit 0' > 05-rpmostree.install \
+&& printf '%s\n' '#!/bin/sh' 'exit 0' > 50-dracut.install \
+&& chmod +x  05-rpmostree.install 50-dracut.install
+
 ## Install CachyOS kernel
 dnf5 -y copr enable bieszczaders/kernel-cachyos
 dnf5 -y install kernel-cachyos kernel-cachyos-devel-matched --allowerasing
@@ -25,6 +34,11 @@ dnf5 -y install uksmd
 dnf5 -y copr enable infinality/kwin-effects-better-blur-dx
 dnf5 -y install kwin-effects-better-blur-dx
 dnf5 -y install kwin-effects-better-blur-dx-x11
+
+# restore kernel install
+mv -f 05-rpmostree.install.bak 05-rpmostree.install \
+&& mv -f 50-dracut.install.bak 50-dracut.install
+cd -
 
 # Regen initramfs
 KERNEL_VERSION=$(dnf list kernel-cachyos -q | awk '/kernel-cachyos/ {print $2}' | head -n 1 | cut -d'-' -f1)-cachyos
