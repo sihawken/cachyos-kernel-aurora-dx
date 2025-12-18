@@ -9,16 +9,28 @@ set -ouex pipefail
 # List of rpmfusion packages can be found here:
 # https://mirrors.rpmfusion.org/mirrorlist?path=free/fedora/updates/39/x86_64/repoview/index.html&protocol=https&redirect=1
 
-# this installs a package from fedora repos
-dnf5 install -y tmux 
+## DNF5 Speedup
+sed -i '/^\[main\]/a max_parallel_downloads=10' /etc/dnf/dnf.conf
 
-# Use a COPR Example:
-#
-# dnf5 -y copr enable ublue-os/staging
-# dnf5 -y install package
-# Disable COPRs so they don't end up enabled on the final image:
-# dnf5 -y copr disable ublue-os/staging
+## Install CachyOS kernel
+dnf5 -y copr enable bieszczaders/kernel-cachyos
+dnf5 -y install kernel-cachyos kernel-cachyos-devel-matched --allowerasing
 
-#### Example for enabling a System Unit File
+## Install CachyOS packages
+dnf5 -y copr enable bieszczaders/kernel-cachyos-addons
+dnf5 -y install libcap-ng libcap-ng-devel procps-ng procps-ng-devel
+
+## Install the Kwin better blur packages
+dnf5 -y copr enable infinality/kwin-effects-better-blur-dx
+dnf5 -y install kwin-effects-better-blur-dx
+dnf5 -y install kwin-effects-better-blur-dx-x11
+
+# Regen initramfs
+KERNEL_VERSION=$(dnf list kernel-cachyos -q | awk '/kernel-cachyos/ {print $2}' | head -n 1 | cut -d'-' -f1)-cachyos
+# Ensure Initramfs is generated
+depmod -a ${KERNEL_VERSION}
+export DRACUT_NO_XATTR=1
+/usr/bin/dracut --no-hostonly --kver "${KERNEL_VERSION}" --reproducible -v --add ostree -f "/lib/modules/${KERNEL_VERSION}/initramfs.img"
+chmod 0600 "/lib/modules/${KERNEL_VERSION}/initramfs.img"
 
 systemctl enable podman.socket
