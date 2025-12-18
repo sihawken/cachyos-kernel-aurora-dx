@@ -29,7 +29,7 @@ dnf5 -y install kernel-cachyos kernel-cachyos-devel-matched --allowerasing
 dnf5 -y copr enable bieszczaders/kernel-cachyos-addons
 dnf5 -y install libcap-ng libcap-ng-devel procps-ng procps-ng-devel
 dnf5 -y install uksmd
-systemctl enable --now uksmd.service
+ln -s /usr/lib/systemd/system/uksmd.service /etc/systemd/system/multi-user.target.wants/uksmd.service
 
 rm -rf /usr/lib/systemd/coredump.conf
 dnf5 -y install cachyos-settings --allowerasing
