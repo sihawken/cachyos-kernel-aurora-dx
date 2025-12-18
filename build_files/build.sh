@@ -99,7 +99,7 @@ releasever=$(/usr/bin/rpm -E %fedora)
 basearch=$(/usr/bin/arch)
 KERNEL_VERSION=$(dnf list kernel-cachyos -q | awk '/kernel-cachyos/ {print $2}' | head -n 1 | cut -d'-' -f1)-cachyos1
 # Ensure Initramfs is generated
-depmod -a ${KERNEL_VERSION}.${releasever}.${basearch}
+depmod -a ${KERNEL_VERSION}.fc${releasever}.${basearch}
 export DRACUT_NO_XATTR=1
 /usr/bin/dracut --no-hostonly --kver "${KERNEL_VERSION}" --reproducible -v --add ostree -f "/lib/modules/${KERNEL_VERSION}/initramfs.img"
 chmod 0600 "/lib/modules/${KERNEL_VERSION}/initramfs.img"
