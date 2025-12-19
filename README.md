@@ -6,6 +6,7 @@
 My system: Framework 13 Laptop (12th Gen Intel)
 
 Base image: [Aurora DX](https://getaurora.dev/)
+
 Modifications:
 - Replaced kernel with [CachyOS Kernel](https://copr.fedorainfracloud.org/coprs/bieszczaders/kernel-cachyos/)
 - [CachyOS ksmd](https://copr.fedorainfracloud.org/coprs/bieszczaders/kernel-cachyos-addons/)
