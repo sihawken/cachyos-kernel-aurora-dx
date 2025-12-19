@@ -98,7 +98,7 @@ cd -
 # Regen initramfs
 releasever=$(/usr/bin/rpm -E %fedora)
 basearch=$(/usr/bin/arch)
-KERNEL_VERSION=$(dnf list kernel-cachyos -q | awk '/kernel-cachyos/ {print $2}' | head -n 1 | cut -d'-' -f1)-cachyos1.fc${releasever}.${basearch}/initramfs.img
+KERNEL_VERSION=$(dnf list kernel-cachyos -q | awk '/kernel-cachyos/ {print $2}' | head -n 1 | cut -d'-' -f1)-cachyos1.fc${releasever}.${basearch}
 # Ensure Initramfs is generated
 depmod -a ${KERNEL_VERSION}
 export DRACUT_NO_XATTR=1
