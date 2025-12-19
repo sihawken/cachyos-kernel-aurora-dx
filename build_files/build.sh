@@ -30,6 +30,7 @@ dnf5 -y copr enable bieszczaders/kernel-cachyos-addons
 dnf5 -y install libcap-ng libcap-ng-devel procps-ng procps-ng-devel
 dnf5 -y install uksmd
 
+## Fix for the .service not being installed to the right place?
 tee "/usr/lib/systemd/system/uksmd.service" > /dev/null <<EOF
 [Unit]
 Description=Userspace KSM helper daemon
@@ -97,12 +98,12 @@ cd -
 # Regen initramfs
 releasever=$(/usr/bin/rpm -E %fedora)
 basearch=$(/usr/bin/arch)
-KERNEL_VERSION=$(dnf list kernel-cachyos -q | awk '/kernel-cachyos/ {print $2}' | head -n 1 | cut -d'-' -f1)-cachyos
+KERNEL_VERSION=$(dnf list kernel-cachyos -q | awk '/kernel-cachyos/ {print $2}' | head -n 1 | cut -d'-' -f1)-cachyos1
 # Ensure Initramfs is generated
-depmod -a ${KERNEL_VERSION}1.fc${releasever}.${basearch}
+depmod -a ${KERNEL_VERSION}.fc${releasever}.${basearch}
 export DRACUT_NO_XATTR=1
-/usr/bin/dracut --no-hostonly --kver "${KERNEL_VERSION}" --reproducible -v --add ostree -f "/lib/modules/${KERNEL_VERSION}1.fc${releasever}.${basearch}/initramfs.img"
-chmod 0600 "/lib/modules/${KERNEL_VERSION}1.fc${releasever}.${basearch}/initramfs.img"
+/usr/bin/dracut --no-hostonly --kver "${KERNEL_VERSION}" --reproducible -v --add ostree -f "/lib/modules/${KERNEL_VERSION}.fc${releasever}.${basearch}/initramfs.img"
+chmod 0600 "/lib/modules/${KERNEL_VERSION}.fc${releasever}.${basearch}/initramfs.img"
 
 ## CLEAN UP
 # Clean up dnf cache to reduce image size
