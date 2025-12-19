@@ -28,6 +28,10 @@ dnf5 -y install kernel-cachyos kernel-cachyos-devel-matched --allowerasing
 ## Install CachyOS settings
 dnf5 -y copr enable bieszczaders/kernel-cachyos-addons
 rm -rf /usr/lib/systemd/coredump.conf
+
+## Install KSMD and CachyOS-Settings
+dnf5 -y install libcap-ng libcap-ng-devel procps-ng procps-ng-devel
+dnf5 -y install uksmd
 dnf5 -y install cachyos-settings --allowerasing
 
 ## Enable KSMD
