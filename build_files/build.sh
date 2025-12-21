@@ -24,7 +24,7 @@ cd /usr/lib/kernel/install.d \
 ## Install CachyOS kernel
 dnf5 -y copr enable bieszczaders/kernel-cachyos
 dnf5 -y remove kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra 
-#TEST rm -rf /lib/modules/* # Remove kernel files that remain
+rm -rf /lib/modules/* # Remove kernel files that remain
 dnf5 -y install kernel-cachyos kernel-cachyos-devel-matched --allowerasing
 
 dnf5 -y copr enable bieszczaders/kernel-cachyos-addons
@@ -34,7 +34,7 @@ rm -rf /usr/lib/systemd/coredump.conf
 
 ## Install KSMD and CachyOS-Settings
 dnf5 -y install libcap-ng libcap-ng-devel procps-ng procps-ng-devel
-#TEST dnf5 -y install cachyos-settings cachyos-ksm-settings --allowerasing
+dnf5 -y install cachyos-settings cachyos-ksm-settings --allowerasing
 
 ## Enable KSMD
 tee "/usr/lib/systemd/system/ksmd.service" > /dev/null <<EOF
@@ -57,9 +57,9 @@ ln -s /usr/lib/systemd/system/ksmd.service /etc/systemd/system/multi-user.target
 # Install bore configurations
 dnf5 -y install bore-sysctl
 
-## Install the Kwin better blur packages
-# dnf5 -y copr enable infinality/kwin-effects-better-blur-dx
-# dnf5 -y install kwin-effects-better-blur-dx
+# Install the Kwin better blur packages
+dnf5 -y copr enable infinality/kwin-effects-better-blur-dx
+dnf5 -y install kwin-effects-better-blur-dx
 
 # restore kernel install
 mv -f 05-rpmostree.install.bak 05-rpmostree.install \
