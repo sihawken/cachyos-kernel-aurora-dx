@@ -54,9 +54,6 @@ EOF
 
 ln -s /usr/lib/systemd/system/ksmd.service /etc/systemd/system/multi-user.target.wants/ksmd.service
 
-# Install bore configurations
-dnf5 -y install bore-sysctl
-
 # Install the Kwin better blur packages
 dnf5 -y copr enable infinality/kwin-effects-better-blur-dx
 dnf5 -y install kwin-effects-better-blur-dx
