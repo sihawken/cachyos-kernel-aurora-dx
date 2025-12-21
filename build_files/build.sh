@@ -52,6 +52,9 @@ ExecStop=/usr/bin/ksmctl -d
 WantedBy=multi-user.target
 EOF
 
+# Install bore configurations
+dnf5 -y install bore-sysctl
+
 ln -s /usr/lib/systemd/system/ksmd.service /etc/systemd/system/multi-user.target.wants/ksmd.service
 
 ## Install the Kwin better blur packages
