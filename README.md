@@ -11,3 +11,4 @@ Modifications:
 - Replaced kernel with [CachyOS Kernel](https://copr.fedorainfracloud.org/coprs/bieszczaders/kernel-cachyos/)
 - [CachyOS ksmd](https://copr.fedorainfracloud.org/coprs/bieszczaders/kernel-cachyos-addons/)
 - [kwin-effects-better-blur-dx](https://copr.fedorainfracloud.org/coprs/infinality/kwin-effects-better-blur-dx/)
+- Removed steam in favour of flatpak steam
