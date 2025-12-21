@@ -12,3 +12,9 @@ Modifications:
 - [CachyOS ksmd](https://copr.fedorainfracloud.org/coprs/bieszczaders/kernel-cachyos-addons/)
 - [kwin-effects-better-blur-dx](https://copr.fedorainfracloud.org/coprs/infinality/kwin-effects-better-blur-dx/)
 - Removed steam in favour of flatpak steam
+
+# Installation instructions:
+Install any atomic fedora (Silverblue, Kinoite, Bazzite, Aurora, ... etc)
+
+Run:
+`rpm-ostree rebase ostree-image-signed:docker://ghcr.io/sihawken/cachyos-kernel-bazzite-dx`
