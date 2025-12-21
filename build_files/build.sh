@@ -24,7 +24,7 @@ cd /usr/lib/kernel/install.d \
 ## Install CachyOS kernel
 dnf5 -y copr enable bieszczaders/kernel-cachyos
 dnf5 -y remove kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra 
-rm -rf /lib/modules/* # Remove kernel files that remain
+#TEST rm -rf /lib/modules/* # Remove kernel files that remain
 dnf5 -y install kernel-cachyos kernel-cachyos-devel-matched --allowerasing
 
 dnf5 -y copr enable bieszczaders/kernel-cachyos-addons
@@ -34,7 +34,7 @@ rm -rf /usr/lib/systemd/coredump.conf
 
 ## Install KSMD and CachyOS-Settings
 dnf5 -y install libcap-ng libcap-ng-devel procps-ng procps-ng-devel
-dnf5 -y install cachyos-settings cachyos-ksm-settings --allowerasing
+#TEST dnf5 -y install cachyos-settings cachyos-ksm-settings --allowerasing
 
 ## Enable KSMD
 tee "/usr/lib/systemd/system/ksmd.service" > /dev/null <<EOF
